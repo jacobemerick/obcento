@@ -900,33 +900,55 @@ class ObcentoTwitter
 	 */
 	private function check_parameter_array($array)
 	{
-		return true; // yes, this is a temp
-	}
-
-	private function validateInputArray($array)
-	{
-		$obcentoValidateInput = new ObcentoTwitterValidateInput();
-		
-		//if($contributor_details !== NULL && $this->obcentoValidateInput->check_contributor_details($contributor_details))
-		//if($count !== NULL && $this->obcentoValidateInput->check_count($count))
-		//if($exclude_replies !== NULL && $this->obcentoValidateInput->check_exclude_replies($exclude_replies))
-		//if($include_entities !== NULL && $this->obcentoValidateInput->check_include_entities($include_entities))
-		//if($include_rts !== NULL && $this->obcentoValidateInput->check_include_rts($include_rts))
-		//if($include_user_entities !== NULL && $this->obcentoValidateInput->check_include_user_entities($include_user_entities))
-		//if($max_id !== NULL && $this->obcentoValidateInput->check_max_id($max_id))
-		//if($screen_name !== NULL && $this->obcentoValidateInput->check_screen_name($screen_name))
-		//if($since_id !== NULL && $this->obcentoValidateInput->check_since_id($since_id))
-		//if($trim_user !== NULL && $this->obcentoValidateInput->check_trim_user($trim_user))
-		//if($user_id !== NULL && $this->obcentoValidateInput->check_user_id($user_id))
-		//if($count !== NULL && $this->obcentoValidateInput->check_count($count))
-		
-		$cleanArray = array();
 		foreach($array as $key => $value)
 		{
-			if($value != NULL)
-				$cleanArray[$key] = $value;
+			switch($key)
+			{
+				case 'contributor_details' :
+					$is_valid = ObcentoTwitterValidateInput::check_contributor_details($value);
+					break;
+				case 'count' :
+					$is_valid = ObcentoTwitterValidateInput::check_count($value);
+					break;
+				case 'exclude_replies' :
+					$is_valid = ObcentoTwitterValidateInput::check_exclude_replies($value);
+					break;
+				case 'include_entities' :
+					$is_valid = ObcentoTwitterValidateInput::check_include_entities($value);
+					break;
+				case 'include_rts' :
+					$is_valid = ObcentoTwitterValidateInput::check_include_rts($value);
+					break;
+				case 'include_user_entities' :
+					$is_valid = ObcentoTwitterValidateInput::check_include_user_entities($value);
+					break;
+				case 'max_id' :
+					$is_valid = ObcentoTwitterValidateInput::check_max_id($value);
+					break;
+				case 'screen_name' :
+					$is_valid = ObcentoTwitterValidateInput::check_screen_name($value);
+					break;
+				case 'since_id' :
+					$is_valid = ObcentoTwitterValidateInput::check_since_id($value);
+					break;
+				case 'trim_user' :
+					$is_valid = ObcentoTwitterValidateInput::check_trim_user($value);
+					break;
+				case 'user_id' :
+					$is_valid = ObcentoTwitterValidateInput::check_user_id($value);
+					break;
+				default :
+					$is_valid = false;
+					break;
+			}
+			
+			if($is_valid === false)
+			{
+				trigger_error("Parameter failed validation: {$key} -> {$value}. Request not attempted.");
+				return false;
+			}
 		}
-		return $cleanArray;
+		return true;
 	}
 
 }
